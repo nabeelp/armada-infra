@@ -12,6 +12,9 @@ param suffix string = substring(uniqueString(resourceGroup().id), 0, 4)
 @description('Specifies the location for all the Azure resources.')
 param location string = resourceGroup().location
 
+@description('Specifies the name of the Network Security Perimeter.')
+param nspName string = ''
+
 @description('Specifies the name Azure AI Hub workspace.')
 param hubName string = ''
 
@@ -92,7 +95,7 @@ param aiServicesIdentity object = {
 param aiServicesCustomSubDomainName string = ''
 
 @description('Specifies whether disable the local authentication via API key.')
-param aiServicesDisableLocalAuth bool = false
+param aiServicesDisableLocalAuth bool = true
 
 @description('Specifies whether or not public endpoint access is allowed for this account..')
 @allowed([
@@ -359,6 +362,16 @@ module project 'modules/project.bicep' = {
   }
 }
 
+module networkSecurityPerimeter 'modules/networkSecurityPerimeter.bicep' = {
+  name: 'networkSecurityPerimeter'
+  params: {
+    name: empty(nspName) ? toLower('${prefix}-nsp-${suffix}') : nspName
+    location: location
+    keyVaultId: keyVault.outputs.id
+    storageAccountId: storageAccount.outputs.id
+  }
+}
+
 output deploymentInfo object = {
   subscriptionId: subscription().subscriptionId
   resourceGroupName: resourceGroup().name
@@ -368,4 +381,5 @@ output deploymentInfo object = {
   aiServicesEndpoint: aiServices.outputs.endpoint
   hubName: hub.outputs.name
   projectName: project.outputs.name
+  networkSecurityPerimeterName: networkSecurityPerimeter.outputs.name
 }
