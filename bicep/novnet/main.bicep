@@ -182,6 +182,9 @@ param storageAccountName string = ''
 @description('Specifies the access tier of the Azure Storage Account resource. The default value is Hot.')
 param storageAccountAccessTier string = 'Hot'
 
+@description('Specifies whether the Azure Storage Account resource allows public access. The default value is enabled.')
+param storageAccountAllowPublicAccess string = 'Enabled'
+
 @description('Specifies whether the Azure Storage Account resource allows public access to blobs. The default value is false.')
 param storageAccountAllowBlobPublicAccess bool = false
 
@@ -280,6 +283,7 @@ module storageAccount 'modules/storageAccount.bicep' = {
     allowBlobPublicAccess: storageAccountAllowBlobPublicAccess
     allowSharedKeyAccess: storageAccountAllowSharedKeyAccess
     allowCrossTenantReplication: storageAccountAllowCrossTenantReplication
+    allowStorageAccountPublicAccess: storageAccountAllowPublicAccess
     minimumTlsVersion: storageAccountMinimumTlsVersion
     networkAclsDefaultAction: storageAccountANetworkAclsDefaultAction
     supportsHttpsTrafficOnly: storageAccountSupportsHttpsTrafficOnly

@@ -24,6 +24,9 @@ param skuName string = 'Standard_LRS'
 @description('Specifies the access tier of the storage account. The default value is Hot.')
 param accessTier string = 'Hot'
 
+@description('Specifies whether the storage account allows public access. The default value is enabled.')
+param allowStorageAccountPublicAccess string = 'Enabled'
+
 @description('Specifies whether the storage account allows public access to blobs. The default value is false.')
 param allowBlobPublicAccess bool = false
 
@@ -155,6 +158,7 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
       bypass: 'AzureServices'
       defaultAction: networkAclsDefaultAction
     }
+    publicNetworkAccess: allowStorageAccountPublicAccess
     supportsHttpsTrafficOnly: supportsHttpsTrafficOnly
   }
 }
