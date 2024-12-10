@@ -1,9 +1,9 @@
-# Deploy Secure Azure AI Studio without a managed virtual network
+# Deploy Secure Azure AI Foundry without a managed virtual network
 
-This collection of [Bicep](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/file) templates demonstrates how to set up an [Azure AI Studio](https://learn.microsoft.com/en-us/azure/ai-studio/what-is-ai-studio) environment with managed identity and Azure RBAC to connected [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/what-are-ai-services) and dependent resources.
+This collection of [Bicep](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/file) templates demonstrates how to set up an [Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/what-is-ai-studio) environment with managed identity and Azure RBAC to connected [Azure AI Services](https://learn.microsoft.com/en-us/azure/ai-services/what-are-ai-services) and dependent resources.
 
 > [!NOTE]
-> If you rather want to deploy an Azure AI Studio environment where the managed virtual network isolation mode of the hub workspace is set to [Allow Internet Outbound](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-managed-network), see [How to deploy an Azure AI Studio hub workspace with a managed virtual network](../managedvnet/README.md) in this repository.
+> If you rather want to deploy an Azure AI Foundry environment where the managed virtual network isolation mode of the hub workspace is set to [Allow Internet Outbound](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/configure-managed-network), see [How to deploy an Azure AI Foundry hub workspace with a managed virtual network](../managedvnet/README.md) in this repository.
 
 [![Deploy To Azure](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/deploytoazure.svg?sanitize=true)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fazure-ai-studio-secure-bicep%2Fmain%2Fbicep%2Fnovnet%2Fmain.bicep)
 [![Visualize](https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/1-CONTRIBUTION-GUIDE/images/visualizebutton.svg?sanitize=true)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fazure-ai-studio-secure-bicep%2Fmain%2Fbicep%2Fnovnet%2Fmain.bicep)
@@ -16,12 +16,12 @@ The Bicep modules deploy the following Azure resources:
 
 | Resource                    | Type                                                                                                                                                                    | Description                                                                                                                 |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Azure Application Insights  | [Microsoft.Insights/components](https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep)                       | An Azure Application Insights instance associated with the Azure AI Studio workspace                                        |
+| Azure Application Insights  | [Microsoft.Insights/components](https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep)                       | An Azure Application Insights instance associated with the Azure AI Foundry workspace                                       |
 | Azure Monitor Log Analytics | [Microsoft.OperationalInsights/workspaces](https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep) | An Azure Log Analytics workspace used to collect diagnostics logs and metrics from Azure resources                          |
-| Azure Key Vault             | [Microsoft.KeyVault/vaults](https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep)                               | An Azure Key Vault instance associated with the Azure AI Studio workspace                                                   |
-| Azure Storage Account       | [Microsoft.Storage/storageAccounts](https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts)                                                | An Azure Storage instance associated with the Azure AI Studio workspace                                                     |
-| Azure Container Registry    | [Microsoft.ContainerRegistry/registries](https://learn.microsoft.com/en-us/azure/templates/microsoft.containerregistry/registries)                                      | An Azure Container Registry instance associated with the Azure AI Studio workspace                                          |
-| Azure AI Hub / Project      | [Microsoft.MachineLearningServices/workspaces](https://learn.microsoft.com/en-us/azure/templates/microsoft.machinelearningservices/workspaces)                          | An Azure AI Studio Hub and Project (Azure ML Workspace of kind 'hub' and 'project')                                         |
+| Azure Key Vault             | [Microsoft.KeyVault/vaults](https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep)                               | An Azure Key Vault instance associated with the Azure AI Foundry workspace                                                  |
+| Azure Storage Account       | [Microsoft.Storage/storageAccounts](https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts)                                                | An Azure Storage instance associated with the Azure AI Foundry workspace                                                    |
+| Azure Container Registry    | [Microsoft.ContainerRegistry/registries](https://learn.microsoft.com/en-us/azure/templates/microsoft.containerregistry/registries)                                      | An Azure Container Registry instance associated with the Azure AI Foundry workspace                                         |
+| Azure AI Hub / Project      | [Microsoft.MachineLearningServices/workspaces](https://learn.microsoft.com/en-us/azure/templates/microsoft.machinelearningservices/workspaces)                          | An Azure AI Foundry Hub and Project (Azure ML Workspace of kind 'hub' and 'project')                                        |
 | Azure AI Services           | [Microsoft.CognitiveServices/accounts](https://learn.microsoft.com/en-us/azure/templates/microsoft.cognitiveservices/accounts)                                          | An Azure AI Services as the model-as-a-service endpoint provider including GPT-4o and ADA Text Embeddings model deployments |
 
 > [!NOTE]
@@ -42,7 +42,7 @@ Before deploying the environment using the Bicep templates, ensure you provide v
 | userObjectId                              | string | N/A                                                        | Specifies the object id of a Microsoft Entra ID user to assign necessary RBAC to.                                                                       |
 | hubName                                   | string | N/A                                                        | Specifies the name Azure AI Hub workspace.                                                                                                              |
 | hubFriendlyName                           | string | N/A                                                        | Specifies the friendly name of the Azure AI Hub workspace.                                                                                              |
-| hubDescription                            | string | N/A                                                        | Specifies the description for the Azure AI Hub workspace displayed in Azure AI Studio.                                                                  |
+| hubDescription                            | string | N/A                                                        | Specifies the description for the Azure AI Hub workspace displayed in Azure AI Foundry.                                                                 |
 | hubIsolationMode                          | string | AllowInternetOutbound, AllowOnlyApprovedOutbound, Disabled | Specifies the isolation mode for the managed network of the Azure AI Hub workspace.                                                                     |
 | hubPublicNetworkAccess                    | string | N/A                                                        | Specifies the public network access for the Azure AI Hub workspace.                                                                                     |
 | connectionAuthType                        | string | ApiKey, AAD, ManagedIdentity, None                         | Specifies the authentication method for the OpenAI Service connection.                                                                                  |
@@ -87,7 +87,7 @@ We suggest reading sensitive configuration data such as passwords or SSH keys fr
 
 ## Getting Started
 
-To deploy the infrastructure for the secure Azure AI Studio, you need to:
+To deploy the infrastructure for the secure Azure AI Foundry, you need to:
 
 ### Prerequisites
 
@@ -123,9 +123,9 @@ Run the following command to deploy the resources:
 
 ### How to Test
 
-By following these steps, you will have Azure AI Studio set up and ready for your projects using Bicep. If you encounter any issues, refer to the additional resources or seek help from the Azure support team.
+By following these steps, you will have Azure AI Foundry set up and ready for your projects using Bicep. If you encounter any issues, refer to the additional resources or seek help from the Azure support team.
 
-After deploying the resources, you can verify the deployment by checking the [Azure Portal](https://portal.azure.com) or [Azure AI Studio](https://ai.azure.com/build). Ensure all the resources are created and configured correctly.
+After deploying the resources, you can verify the deployment by checking the [Azure Portal](https://portal.azure.com) or [Azure AI Foundry](https://ai.azure.com/build). Ensure all the resources are created and configured correctly.
 
 You can also follow these [instructions](../../promptflow/README.md) to deploy, expose, and call the [Basic Chat](https://github.com/microsoft/promptflow/tree/main/examples/flows/chat/chat-basic) prompt flow using Bash scripts and Azure CLI.
 
@@ -135,4 +135,4 @@ You can also follow these [instructions](../../promptflow/README.md) to deploy, 
 
 For more information, see:
 
-- [Azure AI Studio Documentation](https://aka.ms/aistudio/docs)
+- [Azure AI Foundry Documentation](https://aka.ms/aistudio/docs)

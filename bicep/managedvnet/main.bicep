@@ -18,8 +18,8 @@ param hubName string = ''
 @description('Specifies the friendly name of the Azure AI Hub workspace.')
 param hubFriendlyName string = 'Demo AI Hub'
 
-@description('Specifies the description for the Azure AI Hub workspace dispayed in Azure AI Studio.')
-param hubDescription string = 'This is a demo hub for use in Azure AI Studio.'
+@description('Specifies the description for the Azure AI Hub workspace displayed in Azure AI Foundry.')
+param hubDescription string = 'This is a demo hub for use in Azure AI Foundry.'
 
 @description('Specifies the Isolation mode for the managed network of the Azure AI Hub workspace.')
 @allowed([
@@ -52,11 +52,11 @@ param connectionAuthType string = 'AAD'
 ])
 param systemDatastoresAuthMode string = 'identity'
 
-@description('Specifies the name for the Azure AI Studio Hub Project workspace.')
+@description('Specifies the name for the Azure AI Foundry Hub Project workspace.')
 param projectName string = ''
 
-@description('Specifies the friendly name for the Azure AI Studio Hub Project workspace.')
-param projectFriendlyName string = 'AI Studio Hub Project'
+@description('Specifies the friendly name for the Azure AI Foundry Hub Project workspace.')
+param projectFriendlyName string = 'AI Foundry Hub Project'
 
 @description('Specifies the public network access for the Azure AI Project workspace.')
 @allowed([
@@ -522,14 +522,18 @@ module network './modules/virtualNetwork.bicep' = {
     vmSubnetNsgName: empty(vmSubnetNsgName) ? toLower('${prefix}-vm-subnet-nsg-${suffix}') : vmSubnetNsgName
     bastionHostEnabled: bastionHostEnabled
     bastionSubnetAddressPrefix: bastionSubnetAddressPrefix
-    bastionSubnetNsgName: empty(bastionSubnetNsgName) ? toLower('${prefix}-bastion-subnet-nsg-${suffix}') : bastionSubnetNsgName
+    bastionSubnetNsgName: empty(bastionSubnetNsgName)
+      ? toLower('${prefix}-bastion-subnet-nsg-${suffix}')
+      : bastionSubnetNsgName
     bastionHostName: empty(bastionHostName) ? toLower('${prefix}-bastion-host-${suffix}') : bastionHostName
     bastionHostDisableCopyPaste: bastionHostDisableCopyPaste
     bastionHostEnableFileCopy: bastionHostEnableFileCopy
     bastionHostEnableIpConnect: bastionHostEnableIpConnect
     bastionHostEnableShareableLink: bastionHostEnableShareableLink
     bastionHostEnableTunneling: bastionHostEnableTunneling
-    bastionPublicIpAddressName: empty(bastionPublicIpAddressName) ? toLower('${prefix}-bastion-host-pip-${suffix}') : bastionPublicIpAddressName
+    bastionPublicIpAddressName: empty(bastionPublicIpAddressName)
+      ? toLower('${prefix}-bastion-host-pip-${suffix}')
+      : bastionPublicIpAddressName
     bastionHostSkuName: bastionHostSkuName
     natGatewayName: empty(natGatewayName) ? toLower('${prefix}-nat-gateway-${suffix}') : natGatewayName
     natGatewayZones: natGatewayZones
@@ -546,17 +550,29 @@ module privateEndpoints './modules/privateEndpoints.bicep' = {
   scope: resourceGroup(virtualNetworkResourceGroupName)
   params: {
     subnetId: network.outputs.vmSubnetId
-    blobStorageAccountPrivateEndpointName: empty(blobStorageAccountPrivateEndpointName) ? toLower('${prefix}-blob-storage-pe-${suffix}') : blobStorageAccountPrivateEndpointName
-    fileStorageAccountPrivateEndpointName: empty(fileStorageAccountPrivateEndpointName) ? toLower('${prefix}-file-storage-pe-${suffix}') : fileStorageAccountPrivateEndpointName
-    keyVaultPrivateEndpointName: empty(keyVaultPrivateEndpointName) ? toLower('${prefix}-key-vault-pe-${suffix}') : keyVaultPrivateEndpointName
-    acrPrivateEndpointName: empty(acrPrivateEndpointName) ? toLower('${prefix}-container-registry-pe-${suffix}') : acrPrivateEndpointName
+    blobStorageAccountPrivateEndpointName: empty(blobStorageAccountPrivateEndpointName)
+      ? toLower('${prefix}-blob-storage-pe-${suffix}')
+      : blobStorageAccountPrivateEndpointName
+    fileStorageAccountPrivateEndpointName: empty(fileStorageAccountPrivateEndpointName)
+      ? toLower('${prefix}-file-storage-pe-${suffix}')
+      : fileStorageAccountPrivateEndpointName
+    keyVaultPrivateEndpointName: empty(keyVaultPrivateEndpointName)
+      ? toLower('${prefix}-key-vault-pe-${suffix}')
+      : keyVaultPrivateEndpointName
+    acrPrivateEndpointName: empty(acrPrivateEndpointName)
+      ? toLower('${prefix}-container-registry-pe-${suffix}')
+      : acrPrivateEndpointName
     storageAccountId: storageAccount.outputs.id
     keyVaultId: keyVault.outputs.id
     acrId: containerRegistry.outputs.id
     createAcrPrivateEndpoint: containerRegistry.outputs.sku == 'Premium'
-    hubWorkspacePrivateEndpointName: empty(hubWorkspacePrivateEndpointName) ? toLower('${prefix}-hub-workspace-pe-${suffix}') : hubWorkspacePrivateEndpointName
+    hubWorkspacePrivateEndpointName: empty(hubWorkspacePrivateEndpointName)
+      ? toLower('${prefix}-hub-workspace-pe-${suffix}')
+      : hubWorkspacePrivateEndpointName
     hubWorkspaceId: hub.outputs.id
-    aiServicesPrivateEndpointName: empty(aiServicesPrivateEndpointName) ? toLower('${prefix}-ai-services-pe-${suffix}') : aiServicesPrivateEndpointName
+    aiServicesPrivateEndpointName: empty(aiServicesPrivateEndpointName)
+      ? toLower('${prefix}-ai-services-pe-${suffix}')
+      : aiServicesPrivateEndpointName
     aiServicesId: aiServices.outputs.id
     location: location
     tags: tags

@@ -33,7 +33,7 @@ For more information on prompt flows and how to deploy a prompt flow using an on
     - [Step 03: Assign Value to Variables](#step-03-assign-value-to-variables)
     - [Step 04: Install Necessary Tools and Packages](#step-04-install-necessary-tools-and-packages)
     - [Step 05: Unzip the Prompt Flow Archive and Update the Configuration](#step-05-unzip-the-prompt-flow-archive-and-update-the-configuration)
-    - [Step 06: Create the Prompt Flow in Azure AI Studio (Optional)](#step-06-create-the-prompt-flow-in-azure-ai-studio-optional)
+    - [Step 06: Create the Prompt Flow in Azure AI Foundry (Optional)](#step-06-create-the-prompt-flow-in-azure-ai-studio-optional)
     - [Step 07: Create the Online Endpoint for the Prompt Flow](#step-07-create-the-online-endpoint-for-the-prompt-flow)
     - [Step 08: Create Role Assignment and Diagnostic Settings](#step-08-create-role-assignment-and-diagnostic-settings)
     - [Step 09: Create a Model for the Prompt Flow](#step-09-create-a-model-for-the-prompt-flow)
@@ -55,10 +55,10 @@ You can use the `deploy.sh` script to create the necessary Azue resources to run
 
 - Azure CLI and ML Extension:
   - Ensure you have the Azure CLI and the Azure Machine Learning extension installed. For detailed instructions, see [Install, set up, and use the CLI (v2)](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-configure-cli?view=azureml-api-2&tabs=public).
-- Azure AI Studio Hub and Project:
-  - You need an Azure AI Studio Hub and Project workspace. If you do not have one, follow the steps in the [How to create and manage an Azure AI Studio hub](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/create-azure-ai-resource?tabs=portal) to create one.
+- Azure AI Foundry Hub and Project:
+  - You need an Azure AI Foundry Hub and Project workspace. If you do not have one, follow the steps in the [How to create and manage an Azure AI Foundry hub](https://learn.microsoft.com/en-us/azure/ai-studio/how-to/create-azure-ai-resource?tabs=portal) to create one.
 - Azure Role-Based Access Control (RBAC):
-  - Ensure you have the appropriate permissions to perform the tasks in this article. Your user account must have the owner or contributor role for the Azure AI Studio Hub and Project workspace or a custom role with the "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/" permission. Additionally, if you use the studio to create or manage online endpoints/deployments, you will need the "Microsoft.Resources/deployments/write" permission from the resource group owner. For more details, see [Role-based access control in Azure AI Studio](https://learn.microsoft.com/en-us/azure/ai-studio/concepts/rbac-ai-studio).
+  - Ensure you have the appropriate permissions to perform the tasks in this article. Your user account must have the owner or contributor role for the Azure AI Foundry Hub and Project workspace or a custom role with the "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/" permission. Additionally, if you use the studio to create or manage online endpoints/deployments, you will need the "Microsoft.Resources/deployments/write" permission from the resource group owner. For more details, see [Role-based access control in Azure AI Foundry](https://learn.microsoft.com/en-us/azure/ai-studio/concepts/rbac-ai-studio).
 - Tools and Packages:
   - The script uses functions from `functions.sh` to install the following tools and packages:
     - `unzip`
@@ -79,12 +79,12 @@ Use the [deploy.sh](../bicep/deploy.sh) script to setup all the necessary Azure 
 
 | Resource                    | Type                                                                                                                                                                    | Description                                                                                                                 |
 | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Azure Application Insights  | [Microsoft.Insights/components](https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep)                       | An Azure Application Insights instance associated with the Azure AI Studio workspace                                        |
+| Azure Application Insights  | [Microsoft.Insights/components](https://learn.microsoft.com/en-us/azure/templates/microsoft.insights/components?pivots=deployment-language-bicep)                       | An Azure Application Insights instance associated with the Azure AI Foundry workspace                                       |
 | Azure Monitor Log Analytics | [Microsoft.OperationalInsights/workspaces](https://learn.microsoft.com/en-us/azure/templates/microsoft.operationalinsights/workspaces?pivots=deployment-language-bicep) | An Azure Log Analytics workspace used to collect diagnostics logs and metrics from Azure resources                          |
-| Azure Key Vault             | [Microsoft.KeyVault/vaults](https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep)                               | An Azure Key Vault instance associated with the Azure AI Studio workspace                                                   |
-| Azure Storage Account       | [Microsoft.Storage/storageAccounts](https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts)                                                | An Azure Storage instance associated with the Azure AI Studio workspace                                                     |
-| Azure Container Registry    | [Microsoft.ContainerRegistry/registries](https://learn.microsoft.com/en-us/azure/templates/microsoft.containerregistry/registries)                                      | An Azure Container Registry instance associated with the Azure AI Studio workspace                                          |
-| Azure AI Hub / Project      | [Microsoft.MachineLearningServices/workspaces](https://learn.microsoft.com/en-us/azure/templates/microsoft.machinelearningservices/workspaces)                          | An Azure AI Studio Hub and Project (Azure ML Workspace of kind 'hub' and 'project')                                         |
+| Azure Key Vault             | [Microsoft.KeyVault/vaults](https://learn.microsoft.com/en-us/azure/templates/microsoft.keyvault/vaults?pivots=deployment-language-bicep)                               | An Azure Key Vault instance associated with the Azure AI Foundry workspace                                                  |
+| Azure Storage Account       | [Microsoft.Storage/storageAccounts](https://learn.microsoft.com/en-us/azure/templates/microsoft.storage/storageaccounts)                                                | An Azure Storage instance associated with the Azure AI Foundry workspace                                                    |
+| Azure Container Registry    | [Microsoft.ContainerRegistry/registries](https://learn.microsoft.com/en-us/azure/templates/microsoft.containerregistry/registries)                                      | An Azure Container Registry instance associated with the Azure AI Foundry workspace                                         |
+| Azure AI Hub / Project      | [Microsoft.MachineLearningServices/workspaces](https://learn.microsoft.com/en-us/azure/templates/microsoft.machinelearningservices/workspaces)                          | An Azure AI Foundry Hub and Project (Azure ML Workspace of kind 'hub' and 'project')                                        |
 | Azure AI Services           | [Microsoft.CognitiveServices/accounts](https://learn.microsoft.com/en-us/azure/templates/microsoft.cognitiveservices/accounts)                                          | An Azure AI Services as the model-as-a-service endpoint provider including GPT-4o and ADA Text Embeddings model deployments |
 
 If any of these Azure resources are missing, please refer to the [README](../README.md) to create them.
@@ -414,11 +414,11 @@ declare -A variables=(
   # The path to the prompt flow zip file for the conversation summarization scenario.
   [promptFlowFilePath]="./test-chat-flow.zip"
 
-  # The name of the prompt flow to be created in Azure AI Studio.
+  # The name of the prompt flow to be created in Azure AI Foundry.
   [promptFlowName]="test-chat-flow"
 
-  # Whether to create the prompt flow in Azure AI Studio (optional).
-  [createPromptFlowInAzureAIStudio]="true"
+  # Whether to create the prompt flow in Azure AI Foundry (optional).
+  [createPromptFlowInAzureAIFoundry]="true"
 
   # Whether to use an existing Azure OpenAI connection and model deployment in the prompt flow.
   # If yes, you need to provide the connection names and deployment name.
@@ -559,11 +559,11 @@ if [ "$useExistingConnection" == "true" ]; then
 fi
 ```
 
-### Step 06: Create the Prompt Flow in Azure AI Studio (Optional)
+### Step 06: Create the Prompt Flow in Azure AI Foundry (Optional)
 
-The following steps are optional to help you create the prompt flow scenario in Azure AI Studio. These steps are helpful for reviewing and testing the prompt flow, but are not required for deploying, running, or monitoring it.
+The following steps are optional to help you create the prompt flow scenario in Azure AI Foundry. These steps are helpful for reviewing and testing the prompt flow, but are not required for deploying, running, or monitoring it.
 
-The script performs the following steps when the variable `createPromptFlowInAzureAiStudio` is set to `true`:
+The script performs the following steps when the variable `createPromptFlowInAzureAIFoundry` is set to `true`:
 
 1. Checks if the prompt flow, named by the variable `promptFlowName`, already exists in your project workspace, named by `projectWorkspaceName`.
 2. Gets a list of all prompt flows in the workspace by running the [pfazure flow list](https://microsoft.github.io/promptflow/reference/pfazure-command-reference.html#pfazure-flow-list) command.
@@ -571,7 +571,7 @@ The script performs the following steps when the variable `createPromptFlowInAzu
 4. If it doesn't find the prompt flow, the script creates a new prompt flow using the [pfazure flow create` command](https://microsoft.github.io/promptflow/reference/pfazure-command-reference.html#pfazure-flow-create). Otherwise, it continues.
 
 ```bash
-if [ "$createPromptFlowInAzureAiStudio" == "true" ]; then
+if [ "$createPromptFlowInAzureAIFoundry" == "true" ]; then
   # Check if the prompt flow already exists in the project workspace
   echo "Checking if the [$promptFlowName] prompt flow already exists in the [$projectWorkspaceName] project workspace..."
   result=$(pfazure flow list \
@@ -1010,7 +1010,7 @@ This step is executed only when the managed network isolation mode of the hub wo
 If you attempt to create a managed deployment within a project workspace that is subordinate to a hub workspace configured with a managed network, and the managed virtual network has not yet been provisioned, you will encounter a [WorkspaceManagedNetworkNotReady](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-troubleshoot-online-endpoints?view=azureml-api-2&tabs=cli#error-workspacemanagednetworknotready) error. For more details, see [Manually provision workspace managed VNet](https://learn.microsoft.com/en-us/azure/machine-learning/how-to-managed-network?view=azureml-api-2#manually-provision-a-managed-vnet).
 
 ```bash
-# Check whether the hub workspace is configured to use a managed virtual network 
+# Check whether the hub workspace is configured to use a managed virtual network
 echo "Checking whether the [$hubWorkspaceName] hub workspace is configured to use a managed virtual network..."
 isolationMode=$(az ml workspace show \
   --name $hubWorkspaceName \
@@ -1019,7 +1019,7 @@ isolationMode=$(az ml workspace show \
   --output tsv \
   --only-show-errors)
 
-if [ $? -eq 0 ]; then 
+if [ $? -eq 0 ]; then
   if [ "$isolationMode" != "disabled" ]; then
     echo "[$hubWorkspaceName] hub workspace has [$isolationMode] isolation mode"
     echo "Checking whether managed virtual network for the [$hubWorkspaceName] hub workspace has been provisioned successfully..."
@@ -1030,15 +1030,15 @@ if [ $? -eq 0 ]; then
       --query managed_network.status.status \
       --output tsv \
       --only-show-errors)
-    
+
     if [ "$status" == "Inactive" ]; then
       echo "Provisioning the managed virtual network for the [$hubWorkspaceName] hub workspace..."
       az ml workspace provision-network \
         --name $hubWorkspaceName \
         --resource-group $resourceGroupName \
         --only-show-errors 1>/dev/null
-      
-      if [ $? -eq 0 ]; then 
+
+      if [ $? -eq 0 ]; then
         echo "The managed virtual network for the [$hubWorkspaceName] hub workspace has been successfully provisioned"
       else
         echo "An error occurred while provisioning the managed virtual network for the [$hubWorkspaceName] hub workspace"
@@ -1213,7 +1213,7 @@ Before you run the script, make sure each variable below has the right value. Ea
 When you run the script from the command line, you can pass the values for each variable as named arguments. For example:
 
 ```bash
-./call.sh --resourceGroupName "ai-rg" --endpointName "test-chat-flow-endpoint" --projectWorkspaceName "moon-project-test" --question "Tell me about Pisa in Tuscany, Italy" 
+./call.sh --resourceGroupName "ai-rg" --endpointName "test-chat-flow-endpoint" --projectWorkspaceName "moon-project-test" --question "Tell me about Pisa in Tuscany, Italy"
 ```
 
 > [!NOTE]
