@@ -207,6 +207,9 @@ param storageAccountANetworkAclsDefaultAction string = 'Allow'
 @description('Specifies whether the Azure Storage Account resource should only support HTTPS traffic.')
 param storageAccountSupportsHttpsTrafficOnly bool = true
 
+@description('Specifies whether creating the Network Security Perimeter.')
+param nspEnabled bool = false
+
 @description('Specifies the resource tags for all the resoources.')
 param tags object = {}
 
@@ -366,7 +369,7 @@ module project 'modules/project.bicep' = {
   }
 }
 
-module networkSecurityPerimeter 'modules/networkSecurityPerimeter.bicep' = {
+module networkSecurityPerimeter 'modules/networkSecurityPerimeter.bicep' = if (nspEnabled) {
   name: 'networkSecurityPerimeter'
   params: {
     name: empty(nspName) ? toLower('${prefix}-nsp-${suffix}') : nspName
@@ -385,5 +388,4 @@ output deploymentInfo object = {
   aiServicesEndpoint: aiServices.outputs.endpoint
   hubName: hub.outputs.name
   projectName: project.outputs.name
-  networkSecurityPerimeterName: networkSecurityPerimeter.outputs.name
 }
