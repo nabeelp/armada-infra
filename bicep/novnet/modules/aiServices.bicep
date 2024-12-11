@@ -103,6 +103,7 @@ resource cognitiveServicesContributorRoleDefinition 'Microsoft.Authorization/rol
 }
 
 // This role assignment grants the user the required permissions to eventually delete and purge the Azure AI Services account
+// https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/role-based-access-control#cognitive-services-contributor
 resource cognitiveServicesContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(userObjectId)) {
   name: guid(aiServices.id, cognitiveServicesContributorRoleDefinition.id, userObjectId)
   scope: aiServices
@@ -113,19 +114,20 @@ resource cognitiveServicesContributorRoleAssignment 'Microsoft.Authorization/rol
   }
 }
 
-resource cognitiveServicesUserRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
-  name: 'a97b65f3-24c7-4388-baec-2e87135dc908'
+resource cognitiveServicesOpenAIContributorRoleDefinition 'Microsoft.Authorization/roleDefinitions@2022-04-01' existing = {
+  name: 'a001fd3d-188f-4b5d-821b-7da978bf7442'
   scope: subscription()
 }
 
-// This role assignment grants the Azure AI Services managed identity the required permissions to access the AI services such as Azure OpenAI. 
-resource cognitiveServicesUserRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(aiServices.id, cognitiveServicesUserRoleDefinition.id, userObjectId)
+// This role assignment grants the user the required permissions to make inference API calls with Microsoft Entra ID
+// https://learn.microsoft.com/en-us/azure/ai-services/openai/how-to/role-based-access-control#cognitive-services-openai-contributor
+resource cognitiveServicesOpenAIContributorRoleAssignment 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (!empty(userObjectId)) {
+  name: guid(aiServices.id, cognitiveServicesOpenAIContributorRoleDefinition.id, userObjectId)
   scope: aiServices
   properties: {
-    roleDefinitionId: cognitiveServicesUserRoleDefinition.id
-    principalType: 'ServicePrincipal'
-    principalId: aiServices.identity.principalId
+    roleDefinitionId: cognitiveServicesOpenAIContributorRoleDefinition.id
+    principalType: 'User'
+    principalId: userObjectId
   }
 }
 
