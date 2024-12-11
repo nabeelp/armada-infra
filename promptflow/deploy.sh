@@ -29,11 +29,11 @@ declare -A variables=(
   # The path to the prompt flow zip file for the conversation summarization scenario.
   [promptFlowFilePath]="./test-chat-flow.zip"
 
-  # The name of the prompt flow to be created in Azure AI Studio.
+  # The name of the prompt flow to be created in Azure AI Foundry.
   [promptFlowName]="test-chat-flow"
 
-  # Whether to create the prompt flow in Azure AI Studio (optional).
-  [createPromptFlowInAzureAIStudio]="true"
+  # Whether to create the prompt flow in Azure AI Foundry (optional).
+  [createPromptFlowInAzureAIFoundry]="true"
 
   # Whether to use an existing Azure OpenAI connection and model deployment in the prompt flow.
   # If yes, you need to provide the connection names and deployment name.
@@ -148,7 +148,7 @@ if [ "$useExistingConnection" == "true" ]; then
   fi
 fi
 
-if [ "$createPromptFlowInAzureAIStudio" == "true" ]; then
+if [ "$createPromptFlowInAzureAIFoundry" == "true" ]; then
   # Check if the prompt flow already exists in the project workspace
   echo "Checking if the [$promptFlowName] prompt flow already exists in the [$projectWorkspaceName] project workspace..."
   result=$(pfazure flow list \
