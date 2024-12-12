@@ -12,6 +12,9 @@ param suffix string = substring(uniqueString(resourceGroup().id), 0, 4)
 @description('Specifies the location for all the Azure resources.')
 param location string = resourceGroup().location
 
+@description('Specifies the name of the Network Security Perimeter.')
+param nspName string = ''
+
 @description('Specifies the name Azure AI Hub workspace.')
 param hubName string = ''
 
@@ -92,7 +95,7 @@ param aiServicesIdentity object = {
 param aiServicesCustomSubDomainName string = ''
 
 @description('Specifies whether disable the local authentication via API key.')
-param aiServicesDisableLocalAuth bool = false
+param aiServicesDisableLocalAuth bool = true
 
 @description('Specifies whether or not public endpoint access is allowed for this account..')
 @allowed([
@@ -179,6 +182,9 @@ param storageAccountName string = ''
 @description('Specifies the access tier of the Azure Storage Account resource. The default value is Hot.')
 param storageAccountAccessTier string = 'Hot'
 
+@description('Specifies whether the Azure Storage Account resource allows public access. The default value is enabled.')
+param storageAccountAllowPublicAccess string = 'Enabled'
+
 @description('Specifies whether the Azure Storage Account resource allows public access to blobs. The default value is false.')
 param storageAccountAllowBlobPublicAccess bool = false
 
@@ -200,6 +206,9 @@ param storageAccountANetworkAclsDefaultAction string = 'Allow'
 
 @description('Specifies whether the Azure Storage Account resource should only support HTTPS traffic.')
 param storageAccountSupportsHttpsTrafficOnly bool = true
+
+@description('Specifies whether creating the Network Security Perimeter.')
+param nspEnabled bool = false
 
 @description('Specifies the resource tags for all the resoources.')
 param tags object = {}
@@ -277,6 +286,7 @@ module storageAccount 'modules/storageAccount.bicep' = {
     allowBlobPublicAccess: storageAccountAllowBlobPublicAccess
     allowSharedKeyAccess: storageAccountAllowSharedKeyAccess
     allowCrossTenantReplication: storageAccountAllowCrossTenantReplication
+    allowStorageAccountPublicAccess: storageAccountAllowPublicAccess
     minimumTlsVersion: storageAccountMinimumTlsVersion
     networkAclsDefaultAction: storageAccountANetworkAclsDefaultAction
     supportsHttpsTrafficOnly: storageAccountSupportsHttpsTrafficOnly
@@ -356,6 +366,16 @@ module project 'modules/project.bicep' = {
     // role assignments
     userObjectId: userObjectId
     aiServicesPrincipalId: aiServices.outputs.principalId
+  }
+}
+
+module networkSecurityPerimeter 'modules/networkSecurityPerimeter.bicep' = if (nspEnabled) {
+  name: 'networkSecurityPerimeter'
+  params: {
+    name: empty(nspName) ? toLower('${prefix}-nsp-${suffix}') : nspName
+    location: location
+    keyVaultId: keyVault.outputs.id
+    storageAccountId: storageAccount.outputs.id
   }
 }
 

@@ -2,9 +2,10 @@ using './main.bicep'
 
 param prefix = 'secure'
 param suffix = 'test'
-param userObjectId = '<user-object-id>'
+param userObjectId = '<user-object-id'
 param keyVaultEnablePurgeProtection = false
-param acrEnabled = true
+param acrEnabled = false
+param nspEnabled = false
 param openAiDeployments = [
   {
     model: {
