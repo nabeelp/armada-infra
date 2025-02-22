@@ -27,6 +27,7 @@ jobs:
       run: chmod +x ./bicep/novnet/deploy.sh
         
     - name: Run deploy script
-      run: ./bicep/novnet/deploy.sh
+      run: cd ./bicep/novnet; ./deploy.sh
       env:
         resourceGroupName: rg-armada
+        location: east-us2
