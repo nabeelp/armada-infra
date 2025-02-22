@@ -43,4 +43,4 @@ jobs:
         # Specifies the path to the parameters file.
         parameters-file: ./bicep/novnet/main.bicepparam
         # Specifies the parameters to use.
-        parameters: 'prefix=armada suffix=dev'
+        parameters: '{"prefix":"armada", "suffix":"dev"}'
