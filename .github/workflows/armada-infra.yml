@@ -29,7 +29,6 @@ jobs:
         type: deployment
         operation: create
         name: ${{ github.run_id }}
-        location: eastus2
         scope: resourceGroup
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
         resource-group-name: rg-armada
