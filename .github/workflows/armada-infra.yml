@@ -34,4 +34,4 @@ jobs:
         resource-group-name: rg-armada
         template-file: ./bicep/novnet/main.bicep
         parameters-file: ./bicep/novnet/main.bicepparam
-        parameters: '{"prefix":"armada"}'
+        parameters: '{"prefix":"armada", "userObjectId‎":"${{ secrets.AZURE_CLIENT_ID }}"}'
