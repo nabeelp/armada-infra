@@ -43,5 +43,5 @@ jobs:
             "keyVaultEnablePurgeProtection":false,
             "hubFriendlyName":"Armada Hub",
             "hubDescription":"Armada Hub",
-            "projectFriendlyName":"Armada Project",
+            "projectFriendlyName":"Armada Project"
           }'
