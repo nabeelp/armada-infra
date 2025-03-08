@@ -34,14 +34,4 @@ jobs:
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }} 
         resource-group-name: rg-armada
         template-file: ./bicep/novnet/main.bicep
-        parameters: |
-          '{
-            "prefix":"armada", 
-            "suffix":"0001", 
-            "userObjectId":"1c408c2b-3b76-46c0-861c-aa82bd370036",
-            "keyVaultEnableSoftDelete":false,
-            "keyVaultEnablePurgeProtection":false,
-            "hubFriendlyName":"Armada Hub",
-            "hubDescription":"Armada Hub",
-            "projectFriendlyName":"Armada Project"
-          }'
+        parameters: '{ "prefix":"armada", "suffix":"0001", "userObjectId":"1c408c2b-3b76-46c0-861c-aa82bd370036", "keyVaultEnableSoftDelete":false, "keyVaultEnablePurgeProtection":false, "hubFriendlyName":"Armada Hub", "hubDescription":"Armada Hub", "projectFriendlyName":"Armada Project" }'
